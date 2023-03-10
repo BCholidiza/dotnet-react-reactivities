@@ -1,51 +1,44 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Activities;
 using Domain;
-using Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
-        [HttpGet]
+        [HttpGet]   //route is /activities
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
-            
             return await Mediator.Send(new List.Query());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")]   //route is /activities/id
         public async Task<ActionResult<Activity>> GetActivity(Guid id)
         {
-            
             return await Mediator.Send(new Details.Query{Id = id});
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateActivity(Activity activity){
-
-            return Ok(await Mediator.Send(new Create.Command{Activity = activity}));
+        [HttpPost]   //route is /activities
+        // IactionResult gives us access HttpResponse types to Ok, Notfound without specifying type
+        // [FromBody] is not necessary because controller is smart enough to figure where this activity comes from
+        public async Task<IActionResult> CreateActivity([FromBody]Activity activity)               
+        {
+            
+            return Ok(await Mediator.Send(new Create.Command {Activity = activity}));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")]   //route is /activities/id
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
-
             activity.Id = id;
             return Ok(await Mediator.Send(new Edit.Command{Activity = activity}));
         }
 
-        [HttpDelete("{id}")]
-         public async Task<IActionResult> DeleteActivity(Guid id)
-         {
+        [HttpDelete("{id}")]   //route is /activities/id
+        public async Task<IActionResult> DeleteActivity(Guid id)
+        {
             return Ok(await Mediator.Send(new Delete.Command{Id = id}));
-         }
+        }
     }
 }
