@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './app/layouts/styles.css';
-import App from './app/layouts/App';
 import { store, StoreContext } from './app/stores/store';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './app/router/Routes';
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -10,7 +11,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StoreContext.Provider value={store}>
-      <App />
+      <RouterProvider router={router}/>
   </StoreContext.Provider>
 );
 
